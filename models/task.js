@@ -1,5 +1,4 @@
 // models/task.js
-
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
@@ -13,13 +12,24 @@ const taskSchema = new mongoose.Schema({
         required: true
     },
     description: String,
-    priority: String,
-    dueDate: Date,
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'medium'
+    },
+    dueDate: {
+        type: Date,
+        default: false,
+    },
+    category: {
+        type: String,
+        enum: ['work', 'personal', 'shopping', 'other'],
+        default: 'other'
+    },
     completed: {
         type: Boolean,
         default: false
-    },
-    category: String
+    }
 });
 
 module.exports = mongoose.model('Task', taskSchema);
