@@ -21,7 +21,7 @@ exports.createTask = async (req, res) => {
 
 exports.getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ userId: req.user.id }); // Assuming you have user authentication
+        const tasks = await Task.find({ userId: req.user.id }); 
         res.json(tasks);
     } catch (err) {
         console.error(err.message);
