@@ -1,33 +1,10 @@
 
-// const User = require('../models/user');
-// // Add necessary imports for password reset functionality
-
-// exports.signup = async (req, res) => {
-//     // Implement user registration logic
-// };
-
-// exports.login = async (req, res) => {
-//     // Implement user login logic
-// };
-
-// exports.forgotPassword = async (req, res) => {
-//     // Implement forgot password logic
-// };
-
-// exports.resetPassword = async (req, res) => {
-//     // Implement reset password logic
-// };
-
-// controllers/authController.js
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-// Assuming these are set somewhere in your config or environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
-const EMAIL = process.env.EMAIL;
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
 exports.signup = async (req, res) => {
     const { name, email, password } = req.body;
@@ -39,7 +16,6 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         user = new User({
-            name,
             email,
             password: hashedPassword,
         });
@@ -65,8 +41,7 @@ exports.login = async (req, res) => {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
 
-        // Token generation (simplified for brevity)
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, "Akshara", { expiresIn: '1h' });
         res.json({ token });
     } catch (err) {
         console.error(err.message);
@@ -82,8 +57,8 @@ exports.forgotPassword = async (req, res) => {
             return res.status(400).json({ msg: 'User does not exist' });
         }
 
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
-        // Send email (simplified)
+        const token = jwt.sign({ id: user.id }, "Akshara", { expiresIn: '1h' });
+      
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -96,7 +71,7 @@ exports.forgotPassword = async (req, res) => {
             from: EMAIL,
             to: user.email,
             subject: 'Reset Password Link',
-            text: `Please use the following link to reset your password: http://yourapp.com/reset-password/${token}`
+            text: `Please use the following link to reset your password: http://localhost:3000/reset-password/${token}`
         };
 
         transporter.sendMail(mailOptions, function(error, info){
