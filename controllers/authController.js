@@ -59,15 +59,18 @@ exports.forgotPassword = async (req, res) => {
         if (!user) {
             return res.status(400).json({ msg: 'User does not exist' });
         }
-        console.log(user,"user")
+        
         const token = jwt.sign({ id: user.id }, "Akshara", { expiresIn: '1h' });
-        console.log(token,"token")
+        
       
         const transporter = nodemailer.createTransport({
             service: 'gmail',
+            host : 'smtp.gmail.com',
+            port : 587,
+            secure: false,
             auth: { 
                 user: 'aksharamaheshwaram93@gmail.com',
-                pass: 'Katyayani@93'
+                pass: 'nouexawkcwnnhjza'
             },
         });
 

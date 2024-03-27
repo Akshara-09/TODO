@@ -23,13 +23,16 @@ exports.createTask = async (req, res) => {
 
 exports.getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ userId: req.user.id }); 
+        const tasks = await Task.find({ userId: req.id }); 
         res.json(tasks);
     } catch (err) {
         console.error(err.message);
+        console.log(err,"err")
         res.status(500).send('Server error');
     }
 };
+
+
 
 exports.updateTask = async (req, res) => {
     const { name, description, priority, dueDate, category, completed } = req.body;
@@ -61,7 +64,7 @@ exports.deleteTask = async (req, res) => {
             return res.status(404).json({ msg: 'Task not found' });
         }
 
-        await task.remove();
+        await task.deleteOne();
         res.json({ msg: 'Task deleted successfully' });
     } catch (err) {
         console.error(err.message);
