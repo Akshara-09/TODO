@@ -11,9 +11,11 @@ const app = express();
 require('dotenv').config();
 
 
+app.use(express.json());
+
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb+srv://aksharamaheshwaram:Katyayani%4039@cluster0.nvpz7od.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect('mongodb+srv://aksharamaheshwaram93:Katyayani@cluster0.ltuwzqw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 .then(() => {
     console.log("Connected to MongoDB");
 }).catch(err => {
@@ -21,9 +23,7 @@ mongoose.connect("mongodb+srv://aksharamaheshwaram:Katyayani%4039@cluster0.nvpz7
     process.exit();
 });
 
-app.post('/', (req, res) => {
-    res.send('POST request received at the root endpoint');
-  });
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
