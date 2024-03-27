@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const EMAIL = process.env.EMAIL;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD
 
 exports.signup = async (req, res) => {
     const { name, email, password } = req.body;
@@ -50,37 +52,39 @@ exports.login = async (req, res) => {
 };
 
 exports.forgotPassword = async (req, res) => {
+    console.log(req.body)
     const { email } = req.body;
     try {
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ msg: 'User does not exist' });
         }
-
+        console.log(user,"user")
         const token = jwt.sign({ id: user.id }, "Akshara", { expiresIn: '1h' });
+        console.log(token,"token")
       
         const transporter = nodemailer.createTransport({
             service: 'gmail',
-            auth: {
-                user: EMAIL,
-                pass: EMAIL_PASSWORD,
+            auth: { 
+                user: 'aksharamaheshwaram93@gmail.com',
+                pass: 'Katyayani@93'
             },
         });
 
         const mailOptions = {
-            from: EMAIL,
+            from: 'aksharamaheshwaram93@gmail.com', 
             to: user.email,
             subject: 'Reset Password Link',
             text: `Please use the following link to reset your password: http://localhost:3000/reset-password/${token}`
         };
 
-        transporter.sendMail(mailOptions, function(error, info){
+        transporter.sendMail(mailOptions, function(error, info) {
             if (error) {
-                console.log(error);
-                res.status(500).send('Email could not be sent');
+                console.error(error);
+                return res.status(500).json({ msg: 'Email could not be sent' });
             } else {
                 console.log('Email sent: ' + info.response);
-                res.json({ msg: 'Reset password email sent' });
+                return res.json({ msg: 'Reset password email sent' });
             }
         });
     } catch (err) {

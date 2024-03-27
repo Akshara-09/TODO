@@ -3,8 +3,9 @@ const Task = require('../models/task');
 exports.createTask = async (req, res) => {
     const { name, description, priority, dueDate, category } = req.body;
     try {
+       
         const task = new Task({
-            userId: req.user.id, 
+            userId: req.id, 
             name,
             description,
             priority,
@@ -18,6 +19,7 @@ exports.createTask = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
 
 exports.getAllTasks = async (req, res) => {
     try {
